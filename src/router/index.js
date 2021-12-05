@@ -1,27 +1,29 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+//404 Not Found 頁面被呼叫的時機是「所有的路由都匹配不到的情況」
+import PageNotFound from '../views/PageNotFound.vue'
+//首頁
+import CheckoutPage from '../views/CheckoutPage.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  //根目錄-首頁
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'checkout-page',
+    component: CheckoutPage
   },
+  //搜索不到頁面
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    //星號 (*) 是萬用字元，這裡代表「所有的網址」
+      path: '*',
+      name: 'not-found',
+      component: PageNotFound,
   }
 ]
 
 const router = new VueRouter({
   routes
 })
-
 export default router
