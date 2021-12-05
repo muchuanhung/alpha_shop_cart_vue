@@ -8,9 +8,15 @@ import CheckoutPage from '../views/CheckoutPage.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  //根目錄-首頁
+  //設定根目錄-轉址
   {
     path: '/',
+    name: 'root',
+    redirect: '/checkout'
+  },
+  //結帳頁面
+  {
+    path: '/checkout',
     name: 'checkout-page',
     component: CheckoutPage
   },
