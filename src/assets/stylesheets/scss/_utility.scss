@@ -1,0 +1,16 @@
+// Mixins for RWD media queries
+@mixin pad-media {
+  @media all and (min-width: $pad-width) {
+    @content;
+  }
+}
+
+@mixin pc-media {
+  @media all and (min-width: $pc-width) {
+    @content;
+  }
+}
+
+%standard-boxshadow {
+  box-shadow: 3px 0 13px 0 rgba(100, 112, 134, 0.1);
+}
