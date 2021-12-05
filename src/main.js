@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router'
 //新增sass全局設定
 import './assets/stylesheets/scss/all.scss'
+//新增字型樣式
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 Vue.config.productionTip = false
 
