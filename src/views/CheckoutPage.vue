@@ -3,7 +3,7 @@
     <!-- 結帳步驟 Stepper && 綁定互動狀態 -->
     <Stepper :checkout-steps="checkoutSteps" :current-step="currentStep" :total-steps="totalSteps" />
     <!-- 結帳資訊表 CheckoutForm-->
-    <CheckoutForm />
+    <CheckoutForm :initial-form-values="formValues" :current-step="currentStep" :total-steps="totalSteps" />
     <!-- 結帳購物車 CheckoutShoppingCart -->
     <CheckoutShoppingCart />
   </div>
@@ -51,6 +51,7 @@ export default {
       formValues: {
         //步驟1
         customInfo: {
+          formId: 1,
           title: "寄送地址",
           salutation: "",
           name: "",
@@ -61,8 +62,9 @@ export default {
         },
         //步驟2
         shippingOption: {
+          formId: 2,
           title: "運送方式",
-          shipping: "",
+          shipping: "standard",
           fee: {
             Standard: 0,
             DHL: 500,
@@ -70,6 +72,7 @@ export default {
         },
         //步驟3
         paymentInfo: {
+          formID: 3,
           title: "付款資訊",
           creditCardHolder: "",
           creditCardNo: "",
@@ -119,6 +122,18 @@ export default {
       });
     },
   },
+    updateCurrentStep(newStep) {
+      this.currentStep = newStep;
+    },
+    updateShippingFee(inputValue) {
+      this.formValues.shippingChoice.shipping = inputValue;
+    },
+    handleAfterFormSubmit(formData) {
+      console.log("-- 透過 API 傳送資料到後端伺服器 --");
+      for (let [name, value] of formData.entries()) {
+        console.log(name + ": " + value);
+      }
+    },
     watch: {
     currentStep: {
       handler: function () {
