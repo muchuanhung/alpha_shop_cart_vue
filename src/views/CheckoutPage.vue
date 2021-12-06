@@ -5,7 +5,7 @@
     <!-- 結帳資訊表 CheckoutForm-->
     <CheckoutForm :initial-form-values="formValues" :current-step="currentStep" :total-steps="totalSteps" />
     <!-- 結帳購物車 CheckoutShoppingCart -->
-    <CheckoutShoppingCart />
+    <CheckoutShoppingCart :initial-shopping-cart="shoppingCart" />
   </div>
 </template>
 
@@ -94,12 +94,12 @@ export default {
             id: 1,
             name: "刷色直筒牛仔褲",
             image: 'product_02.jpg',
-            price: 3999,
+            price: 1299,
             qty: 1,
           },
         ],
         shippingFee : 0,
-        totalAmount: -1,
+        totalAmount: 5298,
       },
     };
   },
@@ -126,7 +126,7 @@ export default {
       this.currentStep = newStep;
     },
     updateShippingFee(inputValue) {
-      this.formValues.shippingChoice.shipping = inputValue;
+      this.shoppingCart.shippingFee = this.formValues.shippingOption.fee[inputValue];
     },
     handleAfterFormSubmit(formData) {
       console.log("-- 透過 API 傳送資料到後端伺服器 --");
