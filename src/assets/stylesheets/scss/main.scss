@@ -1,10 +1,10 @@
-// reset CSS
-@import "./base/reset";
 /* ------- basic setting ------- */
+@import "./base/reset";
 @import "./base/color";
 @import "./base/breakpoint";
 
 /* ------- component setting ------- */
+@import "./components/stepper";
 
 /* ------- layout setting ------- */
 @import "./layout/header";

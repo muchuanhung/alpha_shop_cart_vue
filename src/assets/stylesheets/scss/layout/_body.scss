@@ -13,3 +13,14 @@ main {
   background-color: var(--bg-color);
   padding-top: 70px;
 }
+
+#Checkout-page {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 14px;
+
+  .checkout-section-title {
+    font-size: 32px;
+    font-weight: 700;
+  }
+}
