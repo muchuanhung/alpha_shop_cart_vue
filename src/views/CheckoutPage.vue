@@ -128,6 +128,9 @@ export default {
     updateShippingFee(inputValue) {
       this.shoppingCart.shippingFee = this.formValues.shippingOption.fee[inputValue];
     },
+    updateShoppingAmount (amount) {
+      this.shoppingCart.totalAmount = amount
+    },
     handleAfterFormSubmit(formData) {
       console.log("-- 透過 API 傳送資料到後端伺服器 --");
       for (let [name, value] of formData.entries()) {
