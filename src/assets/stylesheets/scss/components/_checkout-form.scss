@@ -1,5 +1,8 @@
-/* form-group */
+@import "../base/breakpoint";
+@import "../base/color";
+@import "../base/shadow";
 
+/* form-group */
 form {
   margin-bottom: 16px;
   @include pc-media {

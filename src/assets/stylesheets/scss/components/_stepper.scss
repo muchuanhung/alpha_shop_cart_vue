@@ -1,7 +1,9 @@
-@import "../base/color";
 @import "../base/breakpoint";
+@import "../base/color";
+@import "../base/shadow";
 
-stepper-section {
+/* stepper */
+.stepper-section {
   &__steps-wrapper {
     margin: 24px 0;
     position: relative;

@@ -1,5 +1,8 @@
+@import "../base/breakpoint";
+@import "../base/color";
+@import "../base/shadow";
+
 /* -- Footer -- */
-// footer
 footer {
   display: none;
   background-color: var(--footer-bg);
