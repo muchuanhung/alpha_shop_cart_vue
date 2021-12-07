@@ -5,7 +5,10 @@
     <!-- 結帳資訊表 CheckoutForm-->
     <CheckoutForm :initial-form-values="formValues" :current-step="currentStep" :total-steps="totalSteps" />
     <!-- 結帳購物車 CheckoutShoppingCart -->
-    <CheckoutShoppingCart :initial-shopping-cart="shoppingCart" />
+    <CheckoutShoppingCart
+      @shopping-list-change="updateShoppingCart"
+      :initial-shopping-cart="shoppingCart"
+    />
   </div>
 </template>
 
@@ -109,6 +112,7 @@ export default {
         if (index < this.currentStep - 1) {
           return {
             ...step,
+            isActive: true,
             isChecked: true,
           };
         } else if (index === this.currentStep - 1) {
@@ -128,21 +132,23 @@ export default {
     updateShippingFee(inputValue) {
       this.shoppingCart.shippingFee = this.formValues.shippingOption.fee[inputValue];
     },
-    updateShoppingAmount (amount) {
-      this.shoppingCart.totalAmount = amount
+    updateShoppingCart(dataFromComponent) {
+      this.shoppingCart = dataFromComponent;
     },
-    handleAfterFormSubmit(formData) {
+     handleAfterFormSubmit(formData) {
       console.log("-- 透過 API 傳送資料到後端伺服器 --");
       for (let [name, value] of formData.entries()) {
         console.log(name + ": " + value);
       }
+      this.$swal.fire(
+        "訂單已送出!",
+        `今日消費金額為：${this.shoppingCart.totalAmount} 元`,
+        "success"
+      );
     },
     watch: {
-    currentStep: {
-      handler: function () {
-        this.updateFormProgress();
-      },
-      deep: true,
+     currentStep: function () {
+      this.updateFormProgress();
     },
   },
 };
