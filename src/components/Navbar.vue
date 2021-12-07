@@ -1,17 +1,16 @@
-<template>  
+<template>
   <header>
     <!-- 漢堡排 -->
-    <div class="header_container">
+    <div class="header__container">
       <input
         type="checkbox"
-         name="navbar_toggle"
-        id="navbar_toggle"
-        class="navbar_toggle"
+        name="navbar__toggle"
+        id="navbar__toggle"
+        class="navbar__toggle"
       />
-      <label for="navbar_toggle" class="navbar_toggle-label"
-        ><i class="fas fa-bars"></i>
-
-      </label>
+      <label for="navbar__toggle" class="navbar__toggle-label"
+        ><i class="fas fa-bars"></i
+      ></label>
       <nav>
         <!-- nav-item-list -->
         <ul class="navbar__nav-list">
@@ -29,48 +28,37 @@
           </li>
         </ul>
       </nav>
-
       <div class="header-actions">
-        <!-- Icon List -->
-         <router-link 
-            to=""
-            class="header-actions_header-link">
-         <i class="fas fa-search"></i>
-         </router-link>
-
-        <router-link 
-            to=""
-            class="header-actions_header-link">
-         <i class="fas fa-shopping-cart"></i>
-         </router-link>
+        <router-link to="" class="header-actions__header-link">
+          <i class="fas fa-search"></i>
+        </router-link>  
+        <router-link to="" class="header-actions__header-link">
+          <i class="fas fa-shopping-cart"></i>
+        </router-link>
 
         <!-- Mode Switch -->
-        <label
+        <div
+          @click="toggleDarkMode"
           for="header-actions__dark-mode-toggle"
-          class="header-actions__dark-mode-toggle-label header-actions__header-link"
+          class="header-actions__dark-mode-toggle header-actions__header-link"
         >
-          <i class="fas fa-moon"></i>
-          <i class="fas fa-sun"></i>
-        </label>
-        <input
-          type="checkbox"
-          name="header-actions__dark-mode-toggle"
-          class="header-actions__dark-mode-toggle"
-        />
-        <!-- use JS to control the toggle of d-flex / d-none -->
+          <span v-show="darkMode"><i class="fas fa-sun"></i></span>
+          <span v-show="!darkMode"><i class="fas fa-moon"></i></span>
+        </div>
       </div>
     </div>
-    <router-link 
-      to="" 
-      class="header__brand">
-      <img class="header__brand__logo-img" :src="logoImage" alt="Alpha Shop logo" />
+    <router-link to="" class="header__brand">
+      <img
+        class="header__brand__logo-img"
+        :src="require('./../assets/image/logo.svg')"
+        alt="Alpha Shop logo"
+      />
       <h1 class="header__brand__shop-name">ALPHA Shop</h1>
     </router-link>
   </header>
 </template>
 
 <script>
-import logoImage from "./../assets/image/logo.svg";
 const dummyData = {
   navList: [
     {
@@ -95,12 +83,29 @@ const dummyData = {
     },
   ],
 };
+
 export default {
   data() {
     return {
-      logoImage,
       navList: dummyData.navList,
+      darkMode: false,
     };
+  },
+  methods: {
+    toggleDarkMode() {
+      console.log("click");
+      this.darkMode = !this.darkMode;
+    },
+  },
+  watch: {
+    darkMode: function () {
+      console.log("watch - mode change");
+      if (this.darkMode) {
+        document.documentElement.setAttribute("dark-theme", "dark");
+      } else {
+        document.documentElement.setAttribute("dark-theme", "light");
+      }
+    },
   },
 };
 </script>

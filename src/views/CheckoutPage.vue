@@ -1,9 +1,21 @@
 <template>
   <div id="Checkout-page">
     <!-- 結帳步驟 Stepper && 綁定互動狀態 -->
-    <Stepper :checkout-steps="checkoutSteps" :current-step="currentStep" :total-steps="totalSteps" />
+    <Stepper
+      :checkout-steps="checkoutSteps"
+      :current-step="currentStep"
+      :total-steps="totalSteps"
+    />
     <!-- 結帳資訊表 CheckoutForm-->
-    <CheckoutForm :initial-form-values="formValues" :current-step="currentStep" :total-steps="totalSteps" />
+    <CheckoutForm
+      @change-current-step="updateCurrentStep"
+      @after-shipping-change="updateShippingFee"
+      @after-form-submit="handleAfterFormSubmit"
+      :storage-key="StorageKey"
+      :initial-form-values="formValues"
+      :initial-current-step="currentStep"
+      :total-steps="totalSteps"
+    />
     <!-- 結帳購物車 CheckoutShoppingCart -->
     <CheckoutShoppingCart
       @shopping-list-change="updateShoppingCart"
@@ -13,69 +25,49 @@
 </template>
 
 <script>
-import Stepper from './../components/Stepper.vue'
-import CheckoutForm from './../components/CheckoutForm.vue'
-import CheckoutShoppingCart from './../components/CheckoutShoppingCart.vue'
-
+import Stepper from "../components/Stepper.vue";
+import CheckoutForm from "../components/CheckoutForm.vue";
+import CheckoutShoppingCart from "../components/CheckoutShoppingCart.vue";
 
 export default {
-   components: {
+  name: "ChekoutPage",
+  components: {
     Stepper,
     CheckoutForm,
     CheckoutShoppingCart,
   },
-
-   data() {
+  data() {
     return {
-      //前後綁定現在步驟 & 總步驟
+      StorageKey: "localFormData",
+      //前後綁定現在步驟 & 總步驟ㄝ
       currentStep: 1,
       totalSteps: 3,
-      //Stepper section
-      checkoutStep: {
-        steps: [
-          {
-            title: '寄送地址',
-            isActive: true,
-            isChecked: false,
-          },
-          {
-            title: '運送方式',
-            isActive: false,
-            isChecked: false,
-          },
-          {
-            title: '付款資訊',
-            isActive: false,
-            isChecked: false,
-          }
-        ],
-      },
-      //ChekcoutForm
       formValues: {
-        //步驟1
-        customInfo: {
+        buyerInfo: {
           formId: 1,
           title: "寄送地址",
-          salutation: "",
+          salutation: "Mr",
           name: "",
           tel: "",
           email: "",
           city: "",
           address: "",
         },
-        //步驟2
-        shippingOption: {
+        shippingChoice: {
           formId: 2,
           title: "運送方式",
           shipping: "standard",
           fee: {
-            Standard: 0,
+            standard: 0,
             DHL: 500,
           },
+          shippingTime: {
+            standard: '約 3-7 個工作天',
+            DHL: '48 小時內'
+          }
         },
-        //步驟3
         paymentInfo: {
-          formID: 3,
+          formId: 3,
           title: "付款資訊",
           creditCardHolder: "",
           creditCardNo: "",
@@ -83,73 +75,103 @@ export default {
           cvcCcv: "",
         },
       },
-      //ShoppingCart
+      checkoutSteps: [
+        {
+          name: "寄送地址",
+          isActive: true,
+          isChecked: false,
+        },
+        {
+          name: "運送方式",
+          isActive: false,
+          isChecked: false,
+        },
+        {
+          name: "付款資訊",
+          isActive: false,
+          isChecked: false,
+        },
+      ],
       shoppingCart: {
-        product: [
+        products: [
           {
             id: 1,
             name: "破壞補丁修身牛仔褲",
-            image: "product_01.jpg",
+            image: "product-01.jpg",
             price: 3999,
             qty: 1,
+            subtotal: 3999,
           },
           {
-            id: 1,
+            id: 2,
             name: "刷色直筒牛仔褲",
-            image: 'product_02.jpg',
+            image: "product-02.jpg",
             price: 1299,
             qty: 1,
+            subtotal: 1299,
           },
         ],
-        shippingFee : 0,
+        shippingFee: 0,
         totalAmount: 5298,
       },
     };
   },
-    methods: {
-    updateFormProgress() {
+  //設定在 created 階段觸發 fetchRestaurant 函式
+  created () {
+    this.fetchLocalFormData()
+  },
+
+  //定義抓取資料的函式 fetchRestaurant，把 dummyData 的內容放進 Vue 元件
+  methods: {
+    fetchLocalFormData () {
+      const localFormData = JSON.parse(localStorage.getItem(this.StorageKey))
+      this.formValues = {
+        ...this.formValues,
+        ...localFormData
+      }
+    },
+    updateCheckoutSteps() {
       this.checkoutSteps = this.checkoutSteps.map((step, index) => {
-        if (index < this.currentStep - 1) {
-          return {
-            ...step,
-            isActive: true,
-            isChecked: true,
-          };
-        } else if (index === this.currentStep - 1) {
-          return {
-            ...step,
-            isActive: true,
-          };
-        } else {
-          return step;
+        return {
+          ...step,
+          isActive: index === this.currentStep - 1 ? true : false,
+          isChecked: index < this.currentStep - 1 ? true : false,
         }
       });
     },
-  },
     updateCurrentStep(newStep) {
       this.currentStep = newStep;
     },
     updateShippingFee(inputValue) {
-      this.shoppingCart.shippingFee = this.formValues.shippingOption.fee[inputValue];
+      this.shoppingCart.shippingFee =
+        this.formValues.shippingChoice.fee[inputValue];
     },
     updateShoppingCart(dataFromComponent) {
       this.shoppingCart = dataFromComponent;
     },
-     handleAfterFormSubmit(formData) {
-      console.log("-- 透過 API 傳送資料到後端伺服器 --");
+    handleAfterFormSubmit(formData) {
+      // TODO: 將資料透過 API 傳送到後端
+      console.log("-- 透過 API 傳送資料到後端 --");
       for (let [name, value] of formData.entries()) {
         console.log(name + ": " + value);
       }
+      // show a pop-up window to notify users
+      const shipping = this.formValues.shippingChoice.shipping
+      const shippingTime = this.formValues.shippingChoice.shippingTime[shipping]
+
       this.$swal.fire(
         "訂單已送出!",
-        `今日消費金額為：${this.shoppingCart.totalAmount} 元`,
+        `今日消費金額為：${this.shoppingCart.totalAmount} 元 <br> 商品會在${shippingTime}送達，請耐心等候`,
         "success"
       );
     },
-    watch: {
-     currentStep: function () {
-      this.updateFormProgress();
+  },
+  watch: {
+    currentStep: function () {
+      this.updateCheckoutSteps();
     },
   },
 };
 </script>
+
+

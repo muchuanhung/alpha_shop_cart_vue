@@ -1,8 +1,7 @@
 <template>
-   <!-- 提交事件不再重载页面 -->
-   <form @submit.stop.prevent="handleFormSubtmit" action="">
-    <!-- form-part 1 -->
-    <div v-show="formShowNow === 'customInfo'" class="form-part">
+  <form @submit.stop.prevent="handleFormSubtmit" action="" novalidate>
+    <!--form - delivery info 階段1-->
+    <div v-show="formShowNow === 'buyerInfo'" class="form-part">
       <h2 class="form-part__title checkout-section-title">寄送地址</h2>
       <div class="form-part__form-row">
         <div class="form-part__form-row__form-unit flex-grow-1">
@@ -14,15 +13,15 @@
               id="salutation"
             >
               <option value="Mr">先生</option>
-              <option value="Ms">女士</option>
-              <option value="none">不拘</option>
+              <option value="Ms">小姐</option>
+              <option value="Mx">不拘</option>
             </select>
           </div>
         </div>
         <div class="form-part__form-row__form-unit flex-grow-2">
           <label for="name">姓名</label>
           <input
-            v-model="formValues.customInfo.name"
+            v-model="formValues.buyerInfo.name"
             type="text"
             name="name"
             id="name"
@@ -34,7 +33,7 @@
         <div class="form-part__form-row__form-unit flex-grow-1-pc">
           <label for="phone">電話</label>
           <input
-            v-model="formValues.customInfo.tel"
+            v-model="formValues.buyerInfo.tel"
             type="text"
             name="phone"
             id="phone"
@@ -44,7 +43,7 @@
         <div class="form-part__form-row__form-unit flex-grow-1-pc">
           <label for="email">Email</label>
           <input
-            v-model="formValues.customInfo.email"
+            v-model="formValues.buyerInfo.email"
             type="text"
             name="email"
             id="email"
@@ -57,23 +56,23 @@
           <label for="city">縣市</label>
           <div class="select-wrapper">
             <select
-              v-model="formValues.customInfo.city"
+              v-model="formValues.buyerInfo.city"
               name="city"
               id="city"
               required
             >
               <option value="" selected disabled>請選擇縣市</option>
-              <option value="">北部</option>
-              <option value="">中部</option>
-              <option value="">南部</option>
-              <option value="">不拘</option>
+               <option value="">北部</option>
+               <option value="">中部</option>
+               <option value="">南部</option>
+               <option value="">不拘</option>
             </select>
           </div>
         </div>
         <div class="form-part__form-row__form-unit flex-grow-2-pc">
           <label for="address">地址</label>
           <input
-            v-model="formValues.customInfo.address"
+            v-model="formValues.buyerInfo.address"
             type="text"
             name="address"
             id="address"
@@ -82,34 +81,29 @@
         </div>
       </div>
     </div>
-     <!-- form-part 2 -->
-    <div v-show="formShowNow === 'shippingOption'" class="form-part">
+
+    <!--form - shipping address 階段2-->
+    <div v-show="formShowNow === 'shippingChoice'" class="form-part">
       <h2 class="form-part__title checkout-section-title">運送方式</h2>
       <div class="form-part__form-row">
         <input
           @change="handleShippingChange"
-          v-model="formValues.shippingOption.shipping"
+          v-model="formValues.shippingChoice.shipping"
           type="radio"
           name="shipping"
           id="standard-shipping"
-          value="shipping"
+          value="standard"
           checked
           required
         />
         <label for="standard-shipping" class="form-part__form-shipping-option">
+          <div class="form-part__form-shipping-option__radio-circle"></div>
           <div class="form-part__form-shipping-option__shipping-desc flex-grow-1">
             <span
-              class="
-                form-part__form-shipping-option__shipping-desc__shipping-subtitle
-              "
-              >標準運送</span
-            >
+               class="form-part__form-shipping-option__shipping-desc__shipping-subtitle">標準配送</span>
             <span
-              class="
-                form-part__form-shipping-option__shipping-desc__shipping-time
-              "
-              >約3~7個工作天</span
-            >
+               class="form-part__form-shipping-option__shipping-desc__shipping-time">
+               約 3-7 個工作天</span>
           </div>
           <div class="form-part__form-shipping-option__shipping-fee">
             {{ 0 | showPriceLabel }}
@@ -118,7 +112,8 @@
       </div>
       <div class="form-part__form-row">
         <input
-          v-model="formValues.shippingOption.shipping"
+          @change="handleShippingChange"
+          v-model="formValues.shippingChoice.shipping"
           type="radio"
           name="shipping"
           id="DHL-shipping"
@@ -129,17 +124,11 @@
           <div class="form-part__form-shipping-option__radio-circle"></div>
           <div class="form-part__form-shipping-option__shipping-desc flex-grow-1">
             <span
-              class="
-                form-part__form-shipping-option__shipping-desc__shipping-subtitle
-              "
-              >DHL 貨運</span
-            >
+              class="form-part__form-shipping-option__shipping-desc__shipping-subtitle">
+              DHL 貨運</span>
             <span
-              class="
-                form-part__form-row__shipping-option__shipping-desc__shipping-time
-              "
-              >48 小時內送達</span
-            >
+              class="form-part__form-row__shipping-option__shipping-desc__shipping-time">
+              48 小時內送達</span>
           </div>
           <div class="form-part__form-shipping-option__shipping-fee">
             {{ 500 | showPriceLabel }}
@@ -148,7 +137,7 @@
       </div>
     </div>
 
-    <!-- form-part 3 -->
+    <!--form - payment metod 階段3-->
     <div v-show="formShowNow === 'paymentInfo'" class="form-part">
       <h2 class="form-part__title checkout-section-title">付款資訊</h2>
       <div class="form-part__form-row">
@@ -210,11 +199,11 @@
           <span class="arrow-symbol">&#8592;</span> 上一步
         </button>
       </div>
-        <button
+      <button
         @click.stop.prevent="handleBtnClick"
         v-show="currentStep < totalSteps"
         class="form-btn-groups__btn btn-next"
-        >
+      >
         下一步 <span class="arrow-symbol">&#8594;</span>
       </button>
       <button
@@ -231,9 +220,14 @@
 
 <script>
 import { priceLabelFilter } from "../utils/mixin.js";
+
 export default {
   name: "CheckoutForm",
   props: {
+    StorageKey: {
+      type: String,
+      required: true
+    },
     initialFormValues: {
       type: Object,
       required: true,
@@ -254,14 +248,24 @@ export default {
       currentStep: 1,
     };
   },
+  mounted() {
+    this.fetchCurrentStep();
+  },
   methods: {
+    fetchCurrentStep() {
+      this.currentStep = Number(this.$route.query.step) || 1;
+    },
+    saveStorage () {
+      localStorage.setItem(this.StorageKey, JSON.stringify(this.formValues))
+    },
     handleBtnClick(event) {
       const targetItem = event.target;
       if (
         targetItem.matches(".btn-next") &&
         this.currentStep < this.totalSteps
       ) {
-        if (this.formValues.customInfo.city.length === 0) {
+        // form validation (only the "city" field is required input for this moment)
+        if (this.formValues.buyerInfo.city.length === 0) {
           this.$swal.fire(
             "必填欄位「縣市」未選擇",
             "請重新確認，謝謝！",
@@ -270,33 +274,54 @@ export default {
           return;
         }
         this.currentStep++;
+        this.$router.replace({
+          name: "checkout-page",
+          query: { step: this.currentStep },
+        });
       } else if (targetItem.matches(".btn-back") && this.currentStep > 1) {
         this.currentStep--;
+        this.$router.replace({
+          name: "checkout-page",
+          query: { step: this.currentStep },
+        });
       }
     },
-    //sweetalert提示
     handleFormSubtmit(event) {
-      const form = event.target;
-      const formData = new FormData(form);
-      this.$emit("after-form-submit", formData);
+      // form validation
+      if (this.formValues.buyerInfo.city.length === 0) {
+        this.$swal.fire(
+          "必填欄位「縣市」未選擇",
+          "請重新確認，謝謝！",
+          "warning"
+        );
+      } else {
+        const form = event.target;
+        const formData = new FormData(form);
+        this.$emit("after-form-submit", formData);
+      }
     },
     handleShippingChange() {
       this.$emit(
         "after-shipping-change",
-        this.formValues.shippingOption.shipping
+        this.formValues.shippingChoice.shipping
       );
     },
   },
   computed: {
-    formShowNow () {
-      return Object.keys(this.formValues)[this.currentStep - 1]
+    formShowNow() {
+      return Object.keys(this.formValues)[this.currentStep - 1];
     },
   },
   watch: {
-    currentStep:function () {
+    currentStep: function () {
       this.$emit("change-current-step", this.currentStep);
     },
+    formValues: {
+      handler: function () {
+        this.saveStorage()
+      },
+      deep: true
+    }
   },
 };
 </script>
- 

@@ -1,7 +1,7 @@
 <template>
-   <div class="shopping-cart">
+  <div class="shopping-cart">
     <div class="shopping-cart__shopping-list">
-     <!-- shopping-item, v-for start  -->
+      <!-- shopping-item, v-for start  -->
       <div
         v-for="(product, index) in shoppingCart.products"
         :key="product.id"
@@ -13,36 +13,53 @@
           alt="product-img"
         />
         <div class="shopping-cart__shopping-list__shopping-item__detail">
-          <p class="shopping-cart__shopping-list__shopping-item__detail__name">{{ product.name }}</p>
+          <p class="shopping-cart__shopping-list__shopping-item__detail__name">
+            {{ product.name }}
+          </p>
           <div class="shopping-cart__shopping-list__shopping-item__detail__qty-wrapper">
-            <span 
-            @click="qtyMinus(index)"
-            class="shopping-cart__shopping-list__shopping-item__detail__qty-wrapper__qty-controller">-</span>
-            <span class="shopping-cart__shopping-list__shopping-item__detail__qty-wrapper__qty">{{ product.qty }}</span>
-            <span 
-            @click="qtyAdd(index)"
-            class="shopping-cart__shopping-list__shopping-item__detail__qty-wrapper__qty-controller">+</span>
+            <span
+              @click="qtyMinus(index)"
+              class="shopping-cart__shopping-list__shopping-item__detail__qty-wrapper__qty-controller"> - </span>
+            <span
+              class="shopping-cart__shopping-list__shopping-item__detail__qty-wrapper__qty
+              ">{{ product.qty }}</span>
+            <span
+              @click="qtyAdd(index)"
+              class="shopping-cart__shopping-list__shopping-item__detail__qty-wrapper__qty-controller"> + </span
+            >
           </div>
-          <div class="shopping-cart__shopping-list__shopping-item__detail__subtotal shopping-cart__price-info">
-            {{ product.subtotal |showPriceLabel }}
+          <div
+            class="
+              shopping-cart__shopping-list__shopping-item__detail__subtotal
+              shopping-cart__price-info">
+            {{ product.subtotal | showPriceLabel }}
           </div>
         </div>
       </div>
-    <!-- v-for end -->
+      <!-- v-for end -->
     </div>
     <div class="shopping-cart__shipping-fee-wrapper">
       <span>運費</span>
-      <span class="shopping-cart__amount-wrapper__total-amount shopping-cart__price-info">{{ calcTotalAmount | showPriceLabel}}</span>
+      <span
+        class="
+          shopping-cart__shipping-fee-wrapper__subtotal
+          shopping-cart__price-info">
+          {{ shoppingCart.shippingFee | showPriceLabel }}
+      </span>
     </div>
     <div class="shopping-cart__amount-wrapper">
       <span>小計</span>
-      <span class="shopping-cart__amount-wrapper__total-amount shopping-cart__price-info">{{ shoppingCart.totalAmount | showPriceLabel}}</span>
+      <span
+        class="
+          shopping-cart__amount-wrapper__total-amount shopping-cart__price-info">
+          {{ calcTotalAmount | showPriceLabel }}</span>
     </div>
   </div>
 </template>
 
 <script>
 import { priceLabelFilter } from "../utils/mixin";
+
 export default {
   props: {
     initialShoppingCart: {
@@ -79,7 +96,7 @@ export default {
       deep: true,
     },
   },
-   methods: {
+  methods: {
     syncShoppingList() {
       this.shoppingCart.totalAmount = this.calcTotalAmount;
       this.$emit("shopping-list-change", this.shoppingCart);
