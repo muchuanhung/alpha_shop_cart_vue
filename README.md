@@ -2,6 +2,8 @@
 
 #### This is a checkout page of an ecommerce store built by Vue.js and SASS.
 
+#### ☞ ☞ Take a look at this [alpha_shop_cart_vue](https://muchuanhung.github.io/alpha_shop_cart_vue/). 👀
+
 ## 🏃‍ Project setup and run
 
 ### Please clone the project
