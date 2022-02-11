@@ -1,11 +1,11 @@
 <template>
   <form @submit.stop.prevent="handleFormSubtmit" action="" novalidate>
-    <!--form - delivery info 階段1-->
+    <!-- form-part 1 -->
     <div v-show="formShowNow === 'buyerInfo'" class="form-part">
       <h2 class="form-part__title checkout-section-title">寄送地址</h2>
       <div class="form-part__form-row">
         <div class="form-part__form-row__form-unit flex-grow-1">
-          <label for="salutation">尊稱</label>
+          <label for="salutation">稱謂</label>
           <div class="select-wrapper">
             <select
               v-model="formValues.buyerInfo.salutation"
@@ -14,7 +14,7 @@
             >
               <option value="Mr">先生</option>
               <option value="Ms">小姐</option>
-              <option value="Mx">不拘</option>
+              <option value="Mx">Mx</option>
             </select>
           </div>
         </div>
@@ -41,7 +41,7 @@
           />
         </div>
         <div class="form-part__form-row__form-unit flex-grow-1-pc">
-          <label for="email">Email</label>
+          <label for="email">E-Mail</label>
           <input
             v-model="formValues.buyerInfo.email"
             type="text"
@@ -62,10 +62,12 @@
               required
             >
               <option value="" selected disabled>請選擇縣市</option>
-               <option value="">北部</option>
-               <option value="">中部</option>
-               <option value="">南部</option>
-               <option value="">不拘</option>
+              <option value="taipei">台北市</option>
+              <option value="new-taipei">新北市</option>
+              <option value="taichung">台中市</option>
+              <option value="tainan">台南市</option>
+              <option value="kaohsiung">高雄市</option>
+              <option value="more">更多...</option>
             </select>
           </div>
         </div>
@@ -82,7 +84,7 @@
       </div>
     </div>
 
-    <!--form - shipping address 階段2-->
+    <!-- form-part 2 -->
     <div v-show="formShowNow === 'shippingChoice'" class="form-part">
       <h2 class="form-part__title checkout-section-title">運送方式</h2>
       <div class="form-part__form-row">
@@ -98,12 +100,21 @@
         />
         <label for="standard-shipping" class="form-part__form-shipping-option">
           <div class="form-part__form-shipping-option__radio-circle"></div>
-          <div class="form-part__form-shipping-option__shipping-desc flex-grow-1">
+          <div
+            class="form-part__form-shipping-option__shipping-desc flex-grow-1"
+          >
             <span
-               class="form-part__form-shipping-option__shipping-desc__shipping-subtitle">標準配送</span>
+              class="
+                form-part__form-shipping-option__shipping-desc__shipping-subtitle
+              "
+              >標準運送</span
+            >
             <span
-               class="form-part__form-shipping-option__shipping-desc__shipping-time">
-               約 3-7 個工作天</span>
+              class="
+                form-part__form-shipping-option__shipping-desc__shipping-time
+              "
+              >約 3-7 個工作天</span
+            >
           </div>
           <div class="form-part__form-shipping-option__shipping-fee">
             {{ 0 | showPriceLabel }}
@@ -122,13 +133,21 @@
         />
         <label for="DHL-shipping" class="form-part__form-shipping-option">
           <div class="form-part__form-shipping-option__radio-circle"></div>
-          <div class="form-part__form-shipping-option__shipping-desc flex-grow-1">
+          <div
+            class="form-part__form-shipping-option__shipping-desc flex-grow-1"
+          >
             <span
-              class="form-part__form-shipping-option__shipping-desc__shipping-subtitle">
-              DHL 貨運</span>
+              class="
+                form-part__form-shipping-option__shipping-desc__shipping-subtitle
+              "
+              >DHL 貨運</span
+            >
             <span
-              class="form-part__form-row__shipping-option__shipping-desc__shipping-time">
-              48 小時內送達</span>
+              class="
+                form-part__form-row__shipping-option__shipping-desc__shipping-time
+              "
+              >48 小時內送達</span
+            >
           </div>
           <div class="form-part__form-shipping-option__shipping-fee">
             {{ 500 | showPriceLabel }}
@@ -137,7 +156,7 @@
       </div>
     </div>
 
-    <!--form - payment metod 階段3-->
+    <!-- form-part 3 -->
     <div v-show="formShowNow === 'paymentInfo'" class="form-part">
       <h2 class="form-part__title checkout-section-title">付款資訊</h2>
       <div class="form-part__form-row">
